@@ -12,14 +12,14 @@ components:
     path:
       post:
         summary: eth_accounts
-        description: Returns a list of addresses owned by client. 
+        description: Returns a list of addresses owned by client.
         tags: []
         parameters:
           - name: apiKey
             in: path
             schema:
               type: string
-              default: demo
+              default: 1659dfb40aa24bbb8153a677b98064d7
             required: true
         requestBody:
           content:
