@@ -19,7 +19,7 @@ components:
             in: path
             schema:
               type: string
-              default: 1659dfb40aa24bbb8153a677b98064d7
+              default: "1659dfb40aa24bbb8153a677b98064d7"
             required: true
         requestBody:
           content:
