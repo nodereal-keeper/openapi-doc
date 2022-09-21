@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: eth call
-  description: Executes a new message call immediately without creating a transaction on the block chain.
+  description: This is one of the most commonly used API calls. It is used to read from the blockchain which includes executing smart contracts, but does not publish anything to the blockchain. This call does not consume any Ether.
   version: '1.0'
 servers:
   - url: 'https://eth-mainnet.nodereal.io/v1'
