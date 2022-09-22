@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: eth_getBlockByHash
+  description: Retrieves information from a particular block in the blockchain.
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        operationId: eth-getBlockByHash
+        summary: eth_getBlockByHash
+        description: Returns information about a block by block hash.
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getBlockByHash
+        x-readme:
+          explorer-enabled: false
+          samples-languages:
+            - javascript
+            - curl
+            - python
+            - go
+        responses:
+          '200':
+            description: 'Returns a block object with the following fields, or null when no block was found.'
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_block
