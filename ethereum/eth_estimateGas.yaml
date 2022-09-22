@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: eth_estimateGas
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_estimateGas
+        description: Generates and returns an estimate of how much gas is necessary to allow the transaction to complete. The transaction will not be added to the blockchain.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: demo
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_estimateGas_550
+        x-readme:
+          explorer-enabled: false
+          samples-languages:
+            - javascript
+            - curl
+            - python
+            - go
+        responses:
+          '200':
+            description: Returns the amount of gas used.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-estimateGas
