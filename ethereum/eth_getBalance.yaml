@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: eth_getBalance
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getBalance
+        description: Returns the balance of the account of a given address.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getBalance
+        x-readme:
+          samples-languages:
+            - javascript
+            - curl
+            - python
+            - go
+        responses:
+          '200':
+            description: 'Returns hex value of the current ETH balance for the given address, measured in wei.'
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-getBalance
