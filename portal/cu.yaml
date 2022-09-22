@@ -1,0 +1,64 @@
+schemes: []
+swagger: '2.0'
+info:
+  description: rpc portal api
+  title: rpc-portal API
+  contact: {}
+  version: '1.0'
+host: 'portal-api.nodereal.io'
+basePath: /v1
+paths:
+  /{user_key}/cu-detail:
+    get:
+      description: Get User CU detail
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - quota
+      summary: GetUserCUDetail
+      parameters:
+        - type: string
+          description: Bearer user token
+          name: Authorization
+          in: header
+        - type: string
+          description: user key or team key
+          name: user_key
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Success
+          schema:
+            allOf:
+              - $ref: '#/definitions/server.Response'
+              - type: object
+                properties:
+                  data:
+                    $ref: '#/definitions/quota.CUDetail'
+definitions:
+  quota.CUDetail:
+    type: object
+    properties:
+      autoscaling:
+        type: boolean
+      cups:
+        type: integer
+      plan:
+        type: string
+      remainingQuota:
+        type: integer
+      totalQuota:
+        type: integer
+      usage:
+        type: integer
+  server.Response:
+    type: object
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
