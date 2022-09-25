@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: net_listening
+  version: '1.0'
+servers:
+  - url: 'https://ethw-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: net_listening
+        description: Returns true if client is actively listening for network connections.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f8728a3265504b998a2f09c83493d76a
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/net_listening
+        responses:
+          '200':
+            description: 'Returns true when listening, otherwise false.'
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_cancelPrivateTransaction
+        operationId: net-listening
