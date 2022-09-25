@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: net_version
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: net_version
+        description: Returns the current network id.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/net_version
+        responses:
+          '200':
+            description: Returns the current network id.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/net_version
+        operationId: net-version
