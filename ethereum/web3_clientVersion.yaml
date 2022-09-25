@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: web3_clientVersion
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: web3_clientVersion
+        description: Returns the current client version.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/web3_clientVersion
+        responses:
+          '200':
+            description: Returns the current client version.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: web3-clientVersion
