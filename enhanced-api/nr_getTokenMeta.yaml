@@ -5,46 +5,44 @@ info:
   version: 0.0.1
 components:
   schemas:
-    TokenMeta:
+    TokenMetabody:
       type: object
       properties:
-        name:
+        contract_address:
           type: string
-          example: USD Coin
-        symbol:
-          type: string
-          example: USDC
-        decimals:
+          example: "0xEA5613EBBBE1E69BF5F05252C215462254F41565"
+        toke_id:
           type: integer
-          example: 18
+          example: USDC
+        toke_type:
+          type: string
+          default: ERC721
+          enum:
+            - ERC721
+            - ERC1155
     TokenMetaResponse:
       type: object
       properties:
-        id:
+        contract_address:
           type: string
-          example: 1
-        jsonrpc:
-          type: string
+          example: "0xEA5613EBBBE1E69BF5F05252C215462254F41565"
+        token_id:
+          type: integer
           example: '2.0'
-        error:
-          type: object
-        result:
-          type: object
-          $ref: '#/components/schemas/TokenMeta'
+        meta_url:
+          type: string
+        meta:
+          type: string
 servers:
   - url: 'https://bsc-mainnet.nodereal.io/v1'
 paths:
   /{apiKey}/nr_getTokenMeta:
     post:
-      summary: Get specific token's metadata.
+      summary: Get specific NFT's metadata.
       description: >-
-        Return name, symbol and decimals of the token.
-
-        - sugar: false
-
-        - cost: 80
+        This API method helps you to get the meta of an ERC1155/ERC721 token of an address.
       tags:
-        - Released
+        - NFT
       parameters:
           - name: apiKey
             in: path
@@ -58,9 +56,6 @@ paths:
             schema:
               type: object
               properties:
-                id:
-                  type: integer
-                  example: 1
                 method:
                   type: string
                   example: nr_getTokenMeta
@@ -68,7 +63,7 @@ paths:
                   type: string
                   example: '2.0'
                 params:
-                  type: array
+                  type: string
                   description: >-
                     - token address: address of the token (ERC20/ERC721/ERC1155)
 
@@ -78,7 +73,7 @@ paths:
                     - '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
       responses:
         '200':
-          description: A JSON array of user names
+          description: This API method helps you to get the meta of an ERC1155/ERC721 token of an address.
           content:
             application/json:
               schema:
