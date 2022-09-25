@@ -1,0 +1,37 @@
+openapi: 3.1.0
+info:
+  title: eth_blockNumber
+  description: Retrieves information from a particular block in the blockchain.
+  version: '1.0'
+servers:
+  - url: 'https://ethw-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_blockNumber
+        operationId: eth-blocknumber
+        description: Returns the number of the most recent block.
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f8728a3265504b998a2f09c83493d76a
+            required: true
+        requestBody:
+          description: Accepts nothing.
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_blockNumber
+        responses:
+          '200':
+            description: Returns integer of the current block number the client is on.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_blockNumber
