@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: eth_getFilterChanges
+  version: '1.0'
+servers:
+  - url: 'https://ethw-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getFilterChanges
+        description: 'Polling method for a filter, which returns an array of logs which occurred since last poll.'
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f8728a3265504b998a2f09c83493d76a
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getFilterChanges
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_getLogs
+        operationId: eth-getFilterChanges
