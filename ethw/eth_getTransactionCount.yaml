@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionCount
+  version: '1.0'
+servers:
+  - url: 'https://ethw-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getTransactionCount
+        description: Returns the number of transactions sent from an address.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f8728a3265504b998a2f09c83493d76a
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getTransactionCount
+        x-readme:
+          samples-languages:
+            - curl
+            - javascript
+            - python
+            - go
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-getTransactionCount
