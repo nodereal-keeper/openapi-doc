@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: eth_getLogs
+  description: 'Returns logs which are records that denote/provide context on specific events within a smart contract, like a token transfer or a change of ownership for example.'
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        operationId: eth-getlogs
+        summary: eth_getLogs
+        description: |
+          Returns an array of all logs matching a given filter object.
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getLogs
+        x-readme:
+          samples-languages:
+            - curl
+            - javascript
+            - python
+            - go
+        responses:
+          '200':
+            description: 'Returns array of log objects, or an empty array if nothing has changed since last poll.'
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_getLogs
