@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: eth_uninstallFilter
+  version: '1.0'
+servers:
+  - url: 'https://eth-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_uninstallFilter
+        description: 'Uninstalls a filter with given id. Should always be called when watch is no longer needed. Additionally, Filters timeout when they aren’t requested with eth_getFilterChangesfor a period of time.'
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 1659dfb40aa24bbb8153a677b98064d7
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_uninstallFilter
+        responses:
+          '200':
+            description: 'Returns true if the filter was successfully uninstalled, otherwise false.'
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_cancelPrivateTransaction
+        operationId: eth-uninstallFilter
