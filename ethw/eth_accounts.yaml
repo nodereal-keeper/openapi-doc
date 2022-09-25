@@ -5,15 +5,36 @@ info:
 servers:
   - url: 'https://ethw-mainnet.nodereal.io/v1'
 paths:
-  /{apiKey}:
-    $ref: '#/components/pathItems/path'
-components:
-  pathItems:
-    path:
+  /{apiKey}/eth_accounts:
+    post:
+      summary: eth_accounts
+      description: Returns a list of addresses owned by client.
+      tags: []
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+            default: f8728a3265504b998a2f09c83493d76a
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../evm_body.yaml#/eth_accounts
+      responses:
+        '200':
+          description: Returns 20 Bytes - addresses owned by the client.
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_responses.yaml#/string_result_response
+      operationId: eth-accounts
+  /{apiKey}/eth_blockNumber:
       post:
-        summary: eth_accounts
-        description: Returns a list of addresses owned by client.
-        tags: []
+        summary: eth_blockNumber
+        operationId: eth-blocknumber
+        description: Returns the number of the most recent block.
         parameters:
           - name: apiKey
             in: path
@@ -22,15 +43,17 @@ components:
               default: f8728a3265504b998a2f09c83493d76a
             required: true
         requestBody:
+          description: Accepts nothing.
           content:
             application/json:
               schema:
-                $ref: ../evm_body.yaml#/eth_accounts
+                $ref: ../evm_body.yaml#/eth_blockNumber
         responses:
           '200':
-            description: Returns 20 Bytes - addresses owned by the client.
+            description: Returns integer of the current block number the client is on.
             content:
               application/json:
                 schema:
-                  $ref: ../evm_responses.yaml#/string_result_response
-        operationId: eth-accounts
+                  $ref: ../evm_responses.yaml#/eth_blockNumber
+
+   
