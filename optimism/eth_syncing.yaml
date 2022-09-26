@@ -1,0 +1,32 @@
+openapi: 3.1.0
+info:
+  title: eth_syncing - optimism
+  version: '1.0'
+servers:
+  - url:  'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      summary: eth_syncing
+      description: Returns a list of addresses owned by client.
+      tags: []
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Accepts nothing.
+        content:
+          application/json:
+            schema:
+              $ref: ../evm_body.yaml#/eth_syncing
+      responses:
+        '200':
+          description: Returns 20 Bytes - addresses owned by the client.
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_responses.yaml#/eth_syncing
+      operationId: eth-syncing-optimism
