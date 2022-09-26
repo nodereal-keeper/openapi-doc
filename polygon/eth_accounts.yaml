@@ -11,7 +11,7 @@ components:
   pathItems:
     path:
       post:
-        summary: eth_accounts
+        summary: eth_accounts_polygon
         description: Returns a list of addresses owned by client.
         tags: []
         parameters:
@@ -33,7 +33,4 @@ components:
               application/json:
                 schema:
                   $ref: ../evm_responses.yaml#/string_result_response
-        operationId: eth-accounts
-    post:
-      $ref: ../ethereum/eth_accounts.yaml#/components/pathItems/path/post
-      operationId: eth-accounts-polygon
+        operationId: eth-accounts-polygon
