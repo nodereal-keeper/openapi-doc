@@ -11,7 +11,7 @@ components:
   pathItems:
     path:
       post:
-        summary: eth_accounts_polygon
+        summary: eth_accounts
         description: Returns a list of addresses owned by client.
         tags: []
         parameters:
