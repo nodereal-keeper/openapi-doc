@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionByHash - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getTransactionByHash.yaml#/components/pathItems/path/post
+      operationId: eth-gettransactionbyhash-polygon
+      x-readme:
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go
