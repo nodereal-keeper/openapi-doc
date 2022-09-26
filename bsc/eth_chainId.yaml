@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: eth_chainId
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_chainId
+        description: 'The chain ID returned should always correspond to the information in the current known head block. This ensures that caller of this RPC method can always use the retrieved information to sign transactions built on top of the head.'
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_chainId
+        responses:
+          '200':
+            description: Returns integer of the current chain ID.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-chainId
