@@ -33,4 +33,3 @@ components:
               application/json:
                 schema:
                   $ref: ../evm_responses.yaml#/string_result_response
-        operationId: eth-accounts-polygon
