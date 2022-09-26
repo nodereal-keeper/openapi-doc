@@ -1,0 +1,39 @@
+openapi: 3.1.0
+info:
+  title: eth_accounts - polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_accounts
+        description: Returns a list of addresses owned by client.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f510fc4d083b49d1ab383d25246cc7de
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_accounts
+        responses:
+          '200':
+            description: Returns 20 Bytes - addresses owned by the client.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-accounts
+    post:
+      $ref: ../ethereum/eth_accounts.yaml#/components/pathItems/path/post
+      operationId: eth-accounts-polygon

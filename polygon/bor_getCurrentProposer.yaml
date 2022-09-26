@@ -1,0 +1,32 @@
+openapi: 3.1.0
+info:
+  title: bor_getCurrentProposer - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      summary: bor_getCurrentProposer
+      description: "Polygon API - Returns current proposer's address."
+      tags: []
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+            default: f510fc4d083b49d1ab383d25246cc7de
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../evm_body.yaml#/bor_getCurrentProposer
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_responses.yaml#/bor_getCurrentProposer
+      operationId: bor-getcurrentproposer-polygon
