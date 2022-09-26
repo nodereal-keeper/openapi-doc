@@ -1,0 +1,18 @@
+openapi: 3.1.0
+info:
+  title: eth_getBlockTransactionCountByHash - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getBlockTransactionCountByHash.yaml#/components/pathItems/path/post
+      operationId: eth-getblocktransactioncountbyhash-polygon
+      parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f510fc4d083b49d1ab383d25246cc7de
+            required: true
