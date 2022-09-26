@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: eth_getProof
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getProof
+        description: Returns the account and storage values of the specified account including the Merkle-proof. This call can be used to verify that the data you are pulling from is not tampered with.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getProof
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_getProof
+        operationId: eth-getProof
+        x-readme:
+          explorer-enabled: false
