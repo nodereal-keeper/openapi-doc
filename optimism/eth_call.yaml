@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: eth_call - optimism
+  version: '1.0'
+servers:
+  - url: 'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      operationId: eth-call-optimism
+      summary: eth_call
+      description: Executes a new message call immediately without creating a transaction on the block chain..
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Accepts the transaction call object.
+        content:
+          application/json:
+            schema:
+              $ref: ../evm_body.yaml#/eth_call_50_gas
+      x-readme:
+        explorer-enabled: false
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go
+      responses:
+        '200':
+          description: Returns integer of the number of transactions in this block.
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_responses.yaml#/string_result_response
