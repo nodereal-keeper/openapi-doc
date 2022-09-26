@@ -1,0 +1,11 @@
+openapi: 3.1.0
+info:
+  title: eth_getUncleByBlockNumberAndIndex - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getUncleByBlockNumberAndIndex.yaml#/components/pathItems/path/post
+      operationId: eth-getunclebyblocknumberandindex-polygon

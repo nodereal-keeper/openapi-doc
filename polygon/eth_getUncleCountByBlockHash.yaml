@@ -1,0 +1,11 @@
+openapi: 3.1.0
+info:
+  title: eth_getUncleCountByBlockHash - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getUncleCountByBlockHash.yaml#/components/pathItems/path/post
+      operationId: eth-getunclecountbyblockhash-polygon
