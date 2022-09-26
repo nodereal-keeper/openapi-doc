@@ -1,0 +1,47 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionByHash
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getTransactionByHash
+        description: 'Returns the information about a transaction requested by transaction hash. In the response object, `blockHash`, `blockNumber`, and `transactionIndex` are `null` when the transaction is pending.'
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getTransactionByHash
+                example:
+                  params:
+                    [
+                      '0x88df016429689c079f3b2f6ad39fa052532c56795b733da78a91ebe6a713944b',
+                    ]
+        x-readme:
+          samples-languages:
+            - curl
+            - javascript
+            - python
+            - go
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_getTransactionByHash
+        operationId: eth-getTransactionByHash

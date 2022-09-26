@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionReceipt
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getTransactionReceipt
+        description: Returns the receipt of a transaction by transaction hash.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f8728a3265504b998a2f09c83493d76a
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getTransactionReceipt
+        x-readme:
+          samples-languages:
+            - curl
+            - javascript
+            - python
+            - go
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_getTransactionReceipt
+        operationId: eth-getTransactionReceipt

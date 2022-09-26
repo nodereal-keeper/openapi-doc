@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionByBlockNumberAndIndex
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getTransactionByBlockNumberAndIndex
+        description: Returns information about a transaction by block number and transaction index position.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getTransactionByBlockNumberAndIndex
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/eth_block
+        operationId: eth-getTransactionByBlockNumberAndIndex
