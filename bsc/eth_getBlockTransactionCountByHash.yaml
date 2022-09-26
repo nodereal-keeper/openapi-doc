@@ -1,0 +1,36 @@
+openapi: 3.1.0
+info:
+  title: eth_getBlockTransactionCountByHash
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getBlockTransactionCountByHash
+        description: Returns the number of transactions in a block matching the given block hash.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getBlockTransactionCountByHash
+        responses:
+          '200':
+            description: ''
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-getBlockTransactionCountByHash

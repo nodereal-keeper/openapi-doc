@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: eth_getCode
+  version: '1.0'
+servers:
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    $ref: '#/components/pathItems/path'
+components:
+  pathItems:
+    path:
+      post:
+        summary: eth_getCode
+        description: Returns code at a given address.
+        tags: []
+        parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: 64a9df0874fb4a93b9d0a3849de012d3
+            required: true
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_body.yaml#/eth_getCode
+        x-readme:
+          samples-languages:
+            - javascript
+            - curl
+            - python
+            - go
+        responses:
+          '200':
+            description: Returns the code from the given address.
+            content:
+              application/json:
+                schema:
+                  $ref: ../evm_responses.yaml#/string_result_response
+        operationId: eth-getCode
