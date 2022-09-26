@@ -1,0 +1,34 @@
+openapi: 3.1.0
+info:
+  title: eth_sendRawTransaction - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      summary: eth_sendRawTransaction
+      description: |
+        Creates a new message call transaction or a contract creation for signed transactions.
+        </br><strong> Note: </strong> Due to network constraints, transactions on Polygon Mainnet must be submitted with a minimum gasPrice of 30 gwei.
+      tags: []
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+            default: f510fc4d083b49d1ab383d25246cc7de
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../evm_body.yaml#/eth_sendRawTransaction
+      responses:
+        '200':
+          description: 'Returns 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available.'
+          content:
+            application/json:
+              schema:
+                $ref: ../evm_responses.yaml#/string_result_response
+      operationId: eth-sendRawTransaction-polygon
