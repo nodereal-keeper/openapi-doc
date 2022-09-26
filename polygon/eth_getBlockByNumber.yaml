@@ -1,0 +1,25 @@
+openapi: 3.1.0
+info:
+  title: eth_getBlockByNumber - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../evm_body.yaml#/eth_getBlockByNumber_l2
+      operationId: eth-getblockbynumber-polygon
+      parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f510fc4d083b49d1ab383d25246cc7de
+            required: true
+      x-readme:
+        explorer-enabled: false
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go
