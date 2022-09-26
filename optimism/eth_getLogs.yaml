@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: eth_getLogs - optimism
+  version: '1.0'
+servers:
+  - url: 'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getLogs.yaml#/components/pathItems/path/post
+      operationId: eth-getlogs-optimism
+      x-readme:
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go

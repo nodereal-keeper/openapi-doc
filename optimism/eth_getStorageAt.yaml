@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: eth_getStorageAt - optimism
+  version: '1.0'
+servers:
+  - url: 'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getStorageAt.yaml#/components/pathItems/path/post
+      operationId: eth-getstorageat-optimism
+      x-readme:
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go

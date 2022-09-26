@@ -1,0 +1,11 @@
+openapi: 3.1.0
+info:
+  title: eth_getBlockTransactionCountByHash - optimism
+  version: '1.0'
+servers:
+  - url: 'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getBlockTransactionCountByHash.yaml#/components/pathItems/path/post
+      operationId: eth-getblocktransactioncountbyhash-optimism
