@@ -3,7 +3,12 @@ info:
   title: debug_traceBlockByHash
   version: '1.0'
 servers:
-  - url: 'https://bsc-mainnet.nodereal.io/v1'
+  - url: '{server_url}'
+    variables:
+      server_url:
+        description: BSC Debug API url
+        default: https://bsc-mainnet.nodereal.io/v1
+tags:
 paths:
   /{apiKey}:
     post:
