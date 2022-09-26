@@ -1,0 +1,18 @@
+openapi: 3.1.0
+info:
+  title: eth_getFilterLogs - Polygon
+  version: '1.0'
+servers:
+  - url: 'https://polygon-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getFilterLogs.yaml#/components/pathItems/path/post
+      operationId: eth-getfilterlogs-polygon
+      parameters:
+          - name: apiKey
+            in: path
+            schema:
+              type: string
+              default: f510fc4d083b49d1ab383d25246cc7de
+            required: true
