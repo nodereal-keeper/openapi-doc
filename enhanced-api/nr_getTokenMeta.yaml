@@ -3,46 +3,55 @@ info:
   title: Nebula Enhanced API
   description: Powered by MegaNode, NodeReal
   version: 0.0.1
+tags:
+- name: fungible-tokens
+  description: Access to fungible-tokens
+- name: NFT
+  description: Access to NFT
+- name: Events
+  description: Access to events
+- name: General
+  description: General information
+- name: Tables
+  description: Access to tables
+- name: Transactions
+  description: Access to transactions
 components:
   schemas:
-    TokenMetabody:
+    TokenMeta:
       type: object
       properties:
-        contract_address:
+        name:
           type: string
-          example: "0xEA5613EBBBE1E69BF5F05252C215462254F41565"
-        toke_id:
-          type: integer
+          example: USD Coin
+        symbol:
+          type: string
           example: USDC
-        toke_type:
-          type: string
-          default: ERC721
-          enum:
-            - ERC721
-            - ERC1155
+        decimals:
+          type: integer
+          example: 18
     TokenMetaResponse:
       type: object
       properties:
-        contract_address:
+        id:
           type: string
-          example: "0xEA5613EBBBE1E69BF5F05252C215462254F41565"
-        token_id:
-          type: integer
+          example: 1
+        jsonrpc:
+          type: string
           example: '2.0'
-        meta_url:
-          type: string
-        meta:
-          type: string
-servers:
-  - url: 'https://bsc-mainnet.nodereal.io/v1'
+        error:
+          type: object
+        result:
+          type: object
+          $ref: '#/components/schemas/TokenMeta'
 paths:
   /{apiKey}/nr_getTokenMeta:
     post:
-      summary: Get specific NFT's metadata.
+      summary: Get specific token's metadata.
       description: >-
-        This API method helps you to get the meta of an ERC1155/ERC721 token of an address.
+        Return name, symbol and decimals of the token.
       tags:
-        - NFT
+        - fungible-tokens
       parameters:
           - name: apiKey
             in: path
@@ -56,6 +65,9 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: integer
+                  example: 1
                 method:
                   type: string
                   example: nr_getTokenMeta
@@ -63,7 +75,7 @@ paths:
                   type: string
                   example: '2.0'
                 params:
-                  type: string
+                  type: array
                   description: >-
                     - token address: address of the token (ERC20/ERC721/ERC1155)
 
@@ -73,8 +85,2066 @@ paths:
                     - '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
       responses:
         '200':
-          description: This API method helps you to get the meta of an ERC1155/ERC721 token of an address.
+          description: A JSON array of user names
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TokenMetaResponse'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: USD Coin
+                      symbol:
+                        type: string
+                        example: USDC
+                      decimails:
+                        type: integer
+                        example: 18
+                      tokenType:
+                        type: string
+                        example: ERC20
+  /nr_getTotalSupply20:
+    summary: get token total supply for ERC20/BEP20
+    post:
+      summary: Get token's total supply for ERC20/BEP20
+      description: >-
+        Return total supply of token.   
+        
+        NOTICE: if the contract does not implement totalSupply() method, an error will be returned 
+      tags:
+        - fungible-tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTotalSupply20
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the token
+
+                    - block number: the hex encoded block number or the string 'latest' or 'earliest' on which the total supply will be checked
+                  items:
+                    type: string
+                  example:
+                    - '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
+                    - 'latest'
+      responses:
+        '200':
+          description: Total supply of token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x000000000000000000000000000000000000000005bf8de73e1a17553e3e59d4
+  /nr_getTotalSupply721:
+    summary: get token total supply for ERC721/BEP721
+    post:
+      summary: Get token's total supply for ERC721/BEP721
+      tags:
+        - Released
+      description: >-
+        Return total supply of token.   
+        
+        NOTICE: if the contract does not implement totalSupply() method, an error will be returned  
+        
+        - sugar: true  
+        
+        - cost: 25
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTotalSupply721
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >- 
+                    - token address: address of the ERC721 token
+
+                    - block number: the hex encoded block number or the string 'latest' or 'earliest' on which the total supply will be checked
+                  items:
+                    type: string
+                  example:
+                    - '0xF24Bf668Aa087990f1d40aBAbF841456E771913c'
+                    - 'latest'
+      responses:
+        '200':
+          description: Total supply of token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x000000000000000000000000000000000000000005bf8de73e1a17553e3e59d4
+  /nr_getTotalSupply1155:
+    summary: get token total supply for ERC1155/BEP1155
+    post:
+      summary: Get token's total supply for ERC1155/BEP1155
+      tags:
+        - Released
+      description: >-
+        Return total supply of 1155 token.   
+        
+        NOTICE: if the contract does not implement totalSupply(uint256 tokenid) method, an error will be returned 
+        
+        - sugar: true  
+        
+        - cost: 25
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTotalSupply1155
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    + token address: [string] address of the ERC1155 token
+
+                    + block number: [string] the hex encoded block number or the string 'latest' or 'earliest' on which the total supply will be checked
+
+                    + token id: [string] the hex encoded token id
+                  items:
+                    type: string
+                  example:
+                    - '0xBe23dD3c644DB84d32eA91d6121A55b8B3Eea6F1'
+                    - '0x1333EF1'
+                    - '0x80'
+      responses:
+        '200':
+          description: Total supply of token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x0000000000000000000000000000000000000000000000000000000000000001
+  /nr_getTokenBalance20:
+    summary: get balance of token for ERC20/BEP20
+    post:
+      summary: Get balance of token for ERC20/BEP20
+      tags:
+        - Released
+      description: >-
+        Returns the balance of an ERC20/BEP20 token of an address.   
+        
+        NOTICE: if the contract has not balanceOf(address account) method, api will return
+        error  
+        
+        - sugar: true  
+        
+        - cost: 25
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenBalance20
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: [string] address of the ERC20 token
+
+                    - account address: [string] address of the account
+
+                    - block number: [string] the hex encoded block number or the string 'latest' or 'earliest' on which the balance will be checked
+                  items:
+                    type: string
+                  example:
+                    - '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
+                    - '0x8894e0a0c962cb723c1976a4421c95949be2d4e3'
+                    - '0x1312D00'
+      responses:
+        '200':
+          description: The balance of an ERC-20/BEP20 token of an address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x000000000000000000000000000000000000000002e04bb41ca9ed87e4b22cb6
+  /nr_getTokenBalance721:
+    summary: get balance of token for ERC721/BEP721
+    post:
+      summary: Get balance of token for ERC721/BEP721
+      tags:
+        - Released
+      description: >-
+        Returns the balance of an ERC721/BEP721 token of an address.   
+        
+        NOTICE: if the contract has not balanceOfbalanceOf(address owner) method, api will  return error
+        
+        - sugar: true  
+        
+        - cost: 25
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenBalance721
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: [string] address of the ERC721 token
+
+                    - account address: [string] address of the account whose balance will be checked
+
+                    - block number: [string] the hex encoded block number or the string 'latest' or 'earliest' on which the balance will be checked
+                  items:
+                    type: string
+                  example:
+                    - '0x07D971C03553011a48E951a53F48632D37652Ba1'
+                    - '0x3d99cfc0839a0b2fe5ca8451cb160bdd205234f6'
+                    - 'latest'
+      responses:
+        '200':
+          description: The balance of an ERC721/BEP721 token of an address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x0000000000000000000000000000000000000000000000000000000000002a5d
+  /nr_getTokenBalance1155:
+    summary: get balance of token for ERC1155/BEP1155
+    post:
+      summary: Get balance of token for ERC1155/BEP1155
+      tags:
+        - Released
+      description: >-
+        Returns the balance of an ERC1155/BEP1155 token of an address.   
+        
+        NOTICE: if the contract has not balanceOf(address account,uint256 id) method, api  will return error  
+        
+        - sugar: true  
+        
+        - cost: 25
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenBalance1155
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the ERC1155 token
+                    
+                    - account address: account address whose balance will be checked
+                     
+                    - block number: the hex encoded block number or the string 'latest' or 'earliest' on which the balance will be checked
+                    
+                    - token id: the hex encoded token id of the ERC1155 token
+                  items:
+                    type: string
+                  example:
+                    - '0x98387108842a7CfC7bA23E080030351f6ea68ac0'
+                    - '0x38767ebadf9b4f9302c5cb88be9a3426234bc9a5'
+                    - 'latest'
+                    - '0x1'
+      responses:
+        '200':
+          description: The balance of an ERC1155/BEP1155 token of an address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    description: 32-byte fixed-length hexadecimal number
+                    example: >-
+                      0x000000000000000000000000000000000000000000000000000000000000006c
+  /nr_getTokenHoldings:
+    post:
+      summary: returns the BEP20 tokens and amount held by an account.
+      tags:
+        - Released
+      description: >-
+        returns the BEP20 tokens and amount held by an account. NOTICE: api will
+        return empty name, symbol if the token address does not have name, symbol func
+        
+        - sugar: false
+        
+        - cost: 300
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenHoldings
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    + accountAddress: account address.
+
+                    + page: page is hex encoded.
+                    
+                    + pageSize: each page return at most pageSize items. pageSize is hex encoded and should be less equal than 100.
+                  items:
+                    type: string
+                  example:
+                    - '0x0E34aD56379aceC7F09d815729B70c85adC1Ec99'
+                    - '0x1'
+                    - '0x12'
+      responses:
+        '200':
+          description: A JSON array of tokens and amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: string
+                        example: '0x34'
+                      details:
+                        type: array
+                        description: 'tokenAddress,tokenName,tokenSymbol,tokenDecimails(hex encoded),tokenBalance'
+                        items:
+                          type: object
+                          properties:
+                            tokenAddress:
+                              type: string
+                              example: '0xfcb5DF42e06A39E233dc707bb3a80311eFD11576'
+                            tokenName:
+                              type: string
+                              example: 'www.METH.co.in'
+                            tokenSymbol:
+                              type: string
+                              example: 'METH'
+                            tokenDecimails:
+                              type: string
+                              example: '0x12'
+                            tokenBalance:
+                              type: string
+                              example: '0x0000000000000000000000000000000000000000f'
+
+
+  /nr_getTokenHolders:
+    post:
+      summary: Return the current token holders and number of tokens held.
+      tags:
+        - Released
+      description: >-
+        return the current token holders and number of tokens held
+        
+        - sugar: false
+        
+        - cost: 300
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenHolders
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-                    
+                    - contract address.
+
+                    - pageSize: each page return at most pageSize items. pageSize is hex encoded and should be less equal than 100.it's useless when passing topN.
+
+                    - pageKey: If more results are available, a pageKey be returned in the response. Pass the pageKey to fetch the next pageSize items. First it should be empty.it's useless when passing topN.
+                    
+                    - topN: [string] (optional) if pass topN, it will return at most topN records and results will return order by balance. topN is hex encoded.
+                  items:
+                    type: string    
+                  example:
+                    - '0xcea59dce6a6d73a24e6d6944cfabc330814c098a'
+                    - '0x14'
+                    - ''
+      responses:
+        '200':
+          description: A JSON array of tokens and amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      pageKey:
+                        type: string
+                        example: '100_342'
+                      details:
+                        type: array
+                        description: 'accountAddress,tokenBalance'
+                        items:
+                          type: object
+                          properties:
+                            accountAddress:
+                              type: string
+                              example: '0x00000000100f9d75535cbf23f82e23db5558e8c1'
+                            tokenBalance:
+                              type: string
+                              example: '0x0000000000000000000000000000000000000000f'
+  /nr_getNFTHoldings:
+    post:
+      summary: Returns the BEP-721/1155 tokens and amount held by an address.
+      tags:
+        - Released
+      description: >-
+        Returns the BEP-721/1155 tokens and amount held by an address.
+        
+        - sugar: false
+        
+        - cost: 200
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTHoldings
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'account address,token type(erc721/erc1155),page(hex encoded),page size(hex encode, should less than 100)'
+                  items:
+                          type: object
+                  example:
+                    - '0x99817ce62abf5b17f58e71071e590cf958e5a1bf'
+                    - 'erc721'
+                    - '0x1'
+                    - '0x14'
+      responses:
+        '200':
+          description: A JSON array of tokens and amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: string
+                        example: '0x34'
+                      details:
+                        type: array
+                        description: 'tokenAddress,tokenName,tokenSymbol,nftNum(hex encoded)'
+                        items:
+                          type: object
+                          properties:
+                            tokenAddress:
+                              type: string
+                              example: '0xfcb5DF42e06A39E233dc707bb3a80311eFD11576'
+                            tokenName:
+                              type: string
+                              example: 'Pancake Lottery Ticket'
+                            tokenSymbol:
+                              type: string
+                              example: 'PLT'
+                            tokenIdNum:
+                              type: string
+                              example: '0x10'
+  /nr_getNFTInventory:
+    post:
+      summary: Returns the BEP-721/1155 token inventory of an address, filtered by contract address.
+      tags:
+        - Released
+      description: >-
+        Returns the BEP-721/1155 token inventory of an address, filtered by contract address.
+        
+        - sugar: false
+        
+        - cost: 200
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTInventory
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >- 
+                    
+                    - accountAddress: account address.
+
+                    - contractAddress: contract address.
+
+                    - pageSize: each page return at most pageSize items. pageSize is hex encoded and should be less equal than 100.
+
+                    - pageKey: If more results are available, a pageKey be returned in the response. Pass the pageKey to fetch the next pageSize items. First it should be empty.
+                  items:
+                    type: object
+                  example:
+                    - '0x0042f9b78c67eb30c020a56d07f9a2fc83bc2514'
+                    - '0x64aF96778bA83b7d4509123146E2B3b07F7deF52'
+                    - '0x14'
+                    - ''
+      responses:
+        '200':
+          description: A JSON array of tokens and amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      pageKey:
+                        type: string
+                        example: '100_342'
+                      details:
+                        type: array
+                        description: 'tokenAddress,tokenName,tokenSymbol,balance'
+                        items:
+                          type: object
+                          properties:
+                            tokenAddress:
+                              type: string
+                              example: '0x5e74094cd416f55179dbd0e45b1a8ed030e396a1'
+                            tokenId:
+                              type: string
+                              example: '0x0000000000000000000000000000000000000000f'
+                            balance:
+                              type: string
+                              example: '0x00000000000000000000000000000000000000001'
+  /nr_getNFTHolders:
+    post:
+      summary: Get the owner(s) for a BEP-721/1155 tokenId.
+      tags:
+        - Released
+      description: >-
+        Get the owner(s) for a BEP-721/1155 tokenId.
+        
+        - sugar: false
+        
+        - cost: 100
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTHolders
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'contract address, tokenId(hex string, it is useless when passing topN), topN(hex string, it will return at most topN records and results will return order by balance)'
+                  items:
+                    type: string
+                  example:
+                    - '0x64aF96778bA83b7d4509123146E2B3b07F7deF52'
+                    - '0x5000004'
+      responses:
+        '200':
+          description: A string representing addresses of the owners
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: array
+                    description: 'ownerList'
+                    items:
+                      type: string
+                    example:
+                      - '0x99817ce62abf5b17f58e71071e590cf958e5a1bf'
+                      - '0x5e74094cd416f55179dbd0e45b1a8ed030e396a1'
+
+  /nr_getNFTMeta:
+    post:
+      summary: Get meta of nft token for ERC1155/ERC721
+      tags:
+        - Released
+      description: >-
+        + Returns the meta of an ERC1155/ERC721 token of an address.
+
+        + **Note: NFT metadata is being updated asynchronously, if the metadata is not present by the time the API is getting called, we will try to retrive it via the URI**
+
+        + **Note: As the token's URI is pointing to an external server, the roundtrip latency could vary and is likely to timeout and you will end up getting an empty metadata**
+
+        + **Note: But the URI calling thread will still keep running in the background and update the metadata if it gets a valid response**
+
+        + **Note: So it's recommended to call this API more than once if you see a valid URI but an empty metadata in the response**
+
+        + Sugar: false
+
+        + Cost: 100
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTMeta
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    + contractAddress: [string] address of NFT contract
+                    
+                    + tokenId: [string] hex encoded token id 
+                    
+                    + tokenType : [string] (optional) "ERC721" or "ERC1155"; specifies type of token to query for
+                  items:
+                    type: string
+                  example:
+                    - '0xEA5613EBBBE1E69BF5F05252C215462254F41565'
+                    - '0x7C7'
+                    - 'ERC721'
+      responses:
+        '200':
+          description: A JSON of token meta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                        example: "0x00663336d9e9d7483e8a82f2454b9a1447323f9f"
+                      token_id:
+                        type: string
+                        example: "0x0000000000000000000000000000000000000000000000000000000000000016"
+                      meta_url:
+                        type: string
+                        example: "https://"
+                      meta:
+                        type: string
+                        example: "{}"
+  /nr_getAssetTransfers:
+    summary: Get transfers for any address,any block,etc
+    post:
+      summary: Get transfers for any address,any block,etc
+      tags:
+        - Released
+      description: >-
+        Returns the transfers for any address,any block,etc.  
+        
+        use pageKey for paging
+        
+        - sugar: false  
+        
+        - cost: 250
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getAssetTransfers
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'one param object'
+                  items:
+                    type: object
+                    description: 'param object'
+                    properties:
+                      category:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - 'external'
+                          - '20'
+                        description: 'option:external,internal,20,721,1155'
+                      fromBlock:
+                        type: string
+                        example: '0xE81917'
+                        description: >-
+                          hexadecimal string or latest, the difference between fromBlock and toBlock must be less than or equal to 1000, when both of them be specified.  
+                          
+                          if request has fromBlock but miss toBlock, toBlock will be auto filled by fromBlock+1000
+                      toBlock:
+                        type: string
+                        example: '0xE81917'
+                        description: >-
+                          hexadecimal string or latest, the difference between fromBlock and toBlock must be less than or equal to 1000, when both of them be specified.  
+
+                          if request has toBlock but miss fromBlock, fromBlock will be auto filled by toBlock-1000
+                      contractAddresses:
+                        type: array
+                        items:
+                          type: string
+                        description: >-
+                          contract addresses array, contractAddresses are OR ed together.
+                        maxItems: 100
+                      fromAddress:
+                        type: string
+                        example: '0x70d8929d04b60af4fb9b58713ebcf18765ade422'
+                        description: 'from address'
+                      toAddress:
+                        type: string
+                        example: '0x1b96b92314c44b159149f7e0303511fb2fc4774f'
+                        description: 'to address'
+                      order:
+                        type: string
+                        example: 'asc'
+                        description: 'option:asc or desc'
+                      transactionHash:
+                        type: string
+                        example: '0x01fc8e26b00f0e3d2d5e1c72ca0353c65985777860a9ce8ea0311f9e7363ef8b'
+                        description: 'transaction hash'
+                      excludeZeroValue:
+                        type: boolean
+                        example: false
+                        description: 'true for excluding zero value data, false for all data'
+                      maxCount:
+                        type: string
+                        example: '0x5'
+                        description: >-
+                          define once request return data count, hex encoded, max value:0x3E8
+                      pageKey:
+                        type: string
+                        example: '0f196533-b1ad-414e-8254-bebf9d27763c'
+                        description: >-
+                          uuid for pagination. If more results are available, a uuid pageKey will be returned in the response. Pass that uuid into pageKey to fetch the next maxCount. For first page not need this param.
+                  example:
+                    - {
+                        "category": ["external","20"],
+                        "fromBlock": "0xE81916",
+                        "toBlock": "0xE81917",
+                        "order": "asc",
+                        "excludeZeroValue": false,
+                        "maxCount": "0x5",
+                        "pageKey": "qg000000-0075-RyKy-efk2-Fx9n32gAu432"
+                      }
+      responses:
+        '200':
+          description: transfers for any address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      pageKey:
+                        type: string
+                        description: 'page key for next page query'
+                        example: 'qh000000-0X5j-WSqq-mCLq-kPfWRH8B1GPS'
+                      transfers:
+                        type: array
+                        description: transfers data array
+                        items:
+                          type: object
+                          properties:
+                            category:
+                              type: string
+                              example: 'external'
+                            blockNum:
+                              type: number
+                              example: 3000000
+                            from:
+                              type: string
+                              example: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
+                            to:
+                              type: string
+                              example: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
+                            value:
+                              type: string
+                              example: '0x5247d85783f2d8'
+                              description: 'hexadecimal string, raw transfer value'
+                            erc721TokenId:
+                              type: string
+                              example: >-
+                                '0x0000000000000000000000000000000000000000000000000000000000001bdf',
+                              description: '32-byte fixed-length hexadecimal string'
+                            erc1155Metadata:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  tokenId:
+                                    type: string
+                                    example: >-
+                                      '0x01',
+                                    description: 'hexadecimal string'
+                                  value:
+                                    type: string
+                                    example: '0x5247d85783f2d8'
+                                    description: 'hexadecimal string, raw transfer value'
+                            asset:
+                              type: string
+                              example: 'ETH'
+                              description: >-
+                                ETH/BNB or the token's symbol. null if not defined in the contract and not available from other sources.
+                            hash:
+                              type: string
+                              example: '0x8505df3d4a1e5311eb8b43f69a6c569c5b73fa97ce8da1027fbc0cf737e260a4'
+                              description: 'transaction hash'
+                            contractAddress:
+                              type: string
+                              example: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d'
+                              description: 'contract address (hex string). null if external transfer'
+                            decimal:
+                              type: string
+                              example: '0x12'
+                              description: 'contract decimal (hex string). null if not defined in the contract and not available from other sources.'
+                            blockTimestamp:
+                              type: string
+                              example: '1609780411'
+                              description: 'Timestamp of the block from which the transaction event originated.'
+                            gasPrice:
+                              type: number
+                              example: 5000000000
+                              description: 'gas price for external transfer, not return when category is others'
+                            gasUsed:
+                              type: number
+                              example: 35813
+                              description: 'gas used for external transfer, not return when category is others'
+                            receiptsStatus:
+                              type: number
+                              example: 1
+                              description: 'receipt status, 1 is success,0 is failed'
+                        example: [{
+                            "category": "external",
+                            "blockNum": "0x6c92dd",
+                            "from": "0x646eafba97ec6ee7631887cdee468b323dd65d4f",
+                            "to": "0x8f07f7312f3ede8b0094f09ab1554c8d89f47ddf",
+                            "value": "0x0",
+                            "asset": "BNB",
+                            "hash": "0xf7605ce61c1855348cde8512d752265a8cbbf57e0ac4c8bc259155f8c1592838",
+                            "blockTimeStamp": 1620089457,
+                            "gasPrice": 5000000000,
+                            "gasUsed": 35813,
+                            "receiptsStatus": 1
+                          }, {
+                            "category": "20",
+                            "blockNum": "0x3b8322",
+                            "from": "0x0554a5d083abf2f056ae3f6029e1714b9a655174",
+                            "to": "0x28451d455f009a30b37bbe74175c9f3460f45cc7",
+                            "value": "0x00000000000000000000000000000000000000000000000564d702d38f5e0000",
+                            "asset": "TWT",
+                            "hash": "0xc16db18719864e6188578d5870e6f30e84d93c52beeb3630ead1a251e460ce4b",
+                            "contractAddress": "0x4b0f1812e5df2a09796481ff14017e6005508003",
+                            "decimal": "18",
+                            "blockTimeStamp": 1610380207
+                          },{
+                            "category": "721",
+                            "blockNum": "0xe97966",
+                            "from": "0x0000000000000000000000000000000000000000",
+                            "to": "0xa35ea428864f790f76b80d834b7dbe4340fd8d90",
+                            "value": "0x0",
+                            "erc721TokenId": "0x000000000000000000000000000000000000000000000000000000000016ed41",
+                            "asset": "SpaceShip",
+                            "hash": "0x6ed64468e1ee365e9670ec373eecdae2ff186d3354e2f88824eddd8d2f1bcccd",
+                            "contractAddress": "0x25828c7d4914694cbb514bb8f88ef94e715e4819",
+                            "blockTimeStamp": 1644998842
+                          },{
+                            "category": "1155",
+                            "blockNum": "0xeed938",
+                            "from": "0x0000000000000000000000000000000000000000",
+                            "to": "0x3acd618733de89269496768784d6b07f844ce480",
+                            "value": "0x0",
+                            "erc1155Metadata": [
+                              {
+                                "tokenId": "51c7d5f32f7dee06107a3d522b6e0902521ba99806e191acd74b349e00000001",
+                                "value": "0000000000000000000000000000000000000000000000000000000000000001"
+                              }
+                            ],
+                            "asset": "MELOSPRELUDE1",
+                            "hash": "0xa931aab01613dce9ab17f22caad4efa3fd209785f675c5d81f19b10179d2f631",
+                            "contractAddress": "0x42616b05cfe1af50e4488c8930d7e7d65bf87ce9",
+                            "blockTimeStamp": 1646059155
+                          }]
+  /nr_getAssetTransfersCount:
+    summary: Get transfers count for any address
+    post:
+      summary: Get transfers count for any address
+      tags:
+        - Released
+      description: >-
+        Returns the transfers for any address
+
+        - sugar: false  
+
+        - cost: 150
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getAssetTransfersCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'one param object'
+                  items:
+                    type: object
+                    description: 'param object'
+                    properties:
+                      category:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - 'external'
+                        description: 'option:external,internal,20,721,1155'
+                      fromBlock:
+                        type: string
+                        example: '0xE81917'
+                        description: 'hexadecimal string or latest'
+                      toBlock:
+                        type: string
+                        example: '0xE81917'
+                        description: 'hexadecimal string or latest'
+                      contractAddresses:
+                        type: array
+                        items:
+                          type: string
+                        description: >-
+                          contract addresses array, contractAddresses are OR ed together.
+                        maxItems: 100
+                      fromAddress:
+                        type: string
+                        example: '0x70d8929d04b60af4fb9b58713ebcf18765ade422'
+                        description: 'from address'
+                      toAddress:
+                        type: string
+                        example: '0x1b96b92314c44b159149f7e0303511fb2fc4774f'
+                        description: 'to address'
+                      transactionHash:
+                        type: string
+                        example: '0x01fc8e26b00f0e3d2d5e1c72ca0353c65985777860a9ce8ea0311f9e7363ef8b'
+                        description: 'transaction hash'
+                      excludeZeroValue:
+                        type: boolean
+                        example: false
+                        description: 'true for excluding zero value data, false for all data'
+                  example:
+                    - {
+                      "category": [ "external"]
+                    }
+      responses:
+        '200':
+          description: transfers for any address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: '0x4'
+                    description: 'transfer count'
+  /nr_getContractCreationTransaction:
+    summary: Get creation transaction for contract
+    post:
+      summary: Get creation transaction for contract
+      tags:
+        - Released
+      description: >-
+        Returns the creation transaction for any contract
+
+        - sugar: false  
+
+        - cost: 250
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getContractCreationTransaction
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'one param object'
+                  items:
+                    type: string
+                    description: 'contract address'
+                    example: "0xc297020be32dc91bb24ce4cad116eb50e55ec5ae"
+      responses:
+        '200':
+          description: creation transaction for contract
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      hash:
+                        type: string
+                        description: transaction hash
+                        example: "0x3c49bfbe70e0188142821dfeaba482bce0e44c9953b31415b78b04e836c072dc"
+                      blockNumber:
+                        type: number
+                        description: block number
+                        example: 56848
+                      blockHash:
+                        type: string
+                        description: block hash
+                        example: "0xf769665c8bf51f0a6678503e1a5e1f2bb494619c3b1fc3cc98eb81f9d6a1ddb8"
+                      timestamp:
+                        type: number
+                        description: block timestamp
+                        example: 1598842324
+                      transactionIndex:
+                        type: number
+                        description: transaction index in block
+                        example: 0
+                      from:
+                        type: string
+                        description: transaction from address
+                        example: "0xa3fd5cc5ba356433b28209d812ff0cf261881e1b"
+                      to:
+                        type: string
+                        description: transaction to address
+                        example: ""
+                      gas:
+                        type: number
+                        description: gas
+                        example: 6721975
+                      gasPrice:
+                        type: number
+                        description: gas price
+                        example: 20000000000
+                      gasUsed:
+                        type: number
+                        description: gas used
+                        example: 225237
+                      cumulativeGasUsed:
+                        type: number
+                        description: cumulative gas used
+                        example: 225237
+                      contractAddress:
+                        type: string
+                        description: contract address
+                        example: "0xc297020be32dc91bb24ce4cad116eb50e55ec5ae"
+                      txreceiptStatus:
+                        type: number
+                        description: transaction receipt status, 1 is success,0 is fail
+                        example: 1
+                      input:
+                        type: string
+                        description: input data hex encoded
+                        example: "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506102b7806100606000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80630900f01014610051578063445df0ac146100955780638da5cb5b146100b3578063fdacd576146100fd575b600080fd5b6100936004803603602081101561006757600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061012b565b005b61009d6101f7565b6040518082815260200191505060405180910390f35b6100bb6101fd565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101296004803603602081101561011357600080fd5b8101908080359060200190929190505050610222565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156101f45760008190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff1660e01b815260040180828152602001915050600060405180830381600087803b1580156101da57600080fd5b505af11580156101ee573d6000803e3d6000fd5b50505050505b50565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561027f57806001819055505b5056fea265627a7a723158206e29ec92cab879aa3e985416229ef7528a6b4dca0bd7e02a54561f2d943dd80364736f6c63430005100032"
+                      nonce:
+                        type: number
+                        description: nonce
+                        example: 0
+                      value:
+                        type: string
+                        description: value
+                        example: "0x0"
+                    example: {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "hash": "0x3c49bfbe70e0188142821dfeaba482bce0e44c9953b31415b78b04e836c072dc",
+                        "blockNumber": 56848,
+                        "blockHash": "0xf769665c8bf51f0a6678503e1a5e1f2bb494619c3b1fc3cc98eb81f9d6a1ddb8",
+                        "timestamp": 1598842324,
+                        "transactionIndex": 0,
+                        "from": "0xa3fd5cc5ba356433b28209d812ff0cf261881e1b",
+                        "to": null,
+                        "gas": 6721975,
+                        "gasPrice": 20000000000,
+                        "gasUsed": 225237,
+                        "cumulativeGasUsed": 225237,
+                        "contractAddress": "0xc297020be32dc91bb24ce4cad116eb50e55ec5ae",
+                        "txreceiptStatus": 1,
+                        "input": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506102b7806100606000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80630900f01014610051578063445df0ac146100955780638da5cb5b146100b3578063fdacd576146100fd575b600080fd5b6100936004803603602081101561006757600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061012b565b005b61009d6101f7565b6040518082815260200191505060405180910390f35b6100bb6101fd565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101296004803603602081101561011357600080fd5b8101908080359060200190929190505050610222565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156101f45760008190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040518263ffffffff1660e01b815260040180828152602001915050600060405180830381600087803b1580156101da57600080fd5b505af11580156101ee573d6000803e3d6000fd5b50505050505b50565b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561027f57806001819055505b5056fea265627a7a723158206e29ec92cab879aa3e985416229ef7528a6b4dca0bd7e02a54561f2d943dd80364736f6c63430005100032",
+                        "nonce": 0,
+                        "value": "0x0"
+                      }
+                    }
+
+  /nr_getNFTCollectionHolders:
+    post:
+      summary: Get Holders info of nft token for ERC1155/ERC721
+      description: >-
+        + Returns the Holders info of nft token for ERC1155/ERC721
+        
+        + Sugar: false
+        
+        + Cost: 50cu
+      tags:
+        - Released
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTCollectionHolders
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - address : contract address.
+                    
+                    - tokenType : [string] "ERC721" or "ERC1155"; specifies type of token to query for
+
+                    - pageSize: each page return at most pageSize items. pageSize is hex encoded and should be less equal than 100.
+
+                    - pageKey: If more results are available, a pageKey be returned in the response. Pass the pageKey to fetch the next pageSize items. First it should be empty.
+                    
+                    - withBalance: [bool] (optional) Whether Balance information is returned
+                  items:
+                    type: string
+                  example:
+                    - "0xC244E2A5c6bbC89cfda2c32Ae0086052c95c3B55"
+                    - "ERC1155"
+                    - "0x14"
+                    - ""
+      responses:
+        '200':
+          description: A JSON Array
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      pageKey:
+                        type: string
+                        example: "100_342"
+                      holderAddresses:
+                        type: array
+                        items:
+                          type: string
+                          example:
+                            - "0xc49982ec7d1e45baae96f9ea2cb65ac1acae282a"
+                            - "0x3988c52ac9a2f9b2e591e14e173161cec6ce98ff"
+                      holderAddressesWithBalances:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ownerAddress:
+                              type: string
+                              example: "0x000001f568875f378bf6d170b790967fe429c81a"
+                            tokenBalances:
+                              type: object
+                              properties:
+                                tokenId:
+                                  type: string
+                                  example: "9446"
+                                balance:
+                                  type: string
+                                  example: "1"
+  /nr_getSummedSupply1155:
+    post:
+      tags:
+        - Released
+      summary: Get summed totalSupply of an ERC1155 token
+      description: >-
+        Sum the totalSupply of every token id in this ERC1155 token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getSummedSupply1155
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'tokenAddress'
+                  items:
+                    type: string
+                  example:
+                    - '0xed8711feff83b446158259981fd97645856e82a5'
+      responses:
+        '200':
+          description: The hex decoded sumed total supply
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x123456"
+  /nr_getTokenHolderCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of token holders of an ERC20 token
+      description: >-
+        Returns the number of token holders of an ERC20 token
+        
+        + Sugar: false
+        
+        + Cost: 50
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenHolderCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'tokenAddress'
+                  items:
+                    type: string
+                  example:
+                    - '0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+      responses:
+        '200':
+          description: The hex encoded number of token holders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x123"
+  /nr_getNFTHolderCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of holders of an NFT(721/1155) token
+      description: >-
+        Returns the number of holders of an NFT(721/1155) token
+        
+        + Sugar: false
+        
+        + Cost: 50
+#      parameters:
+#        - name: Token Address
+#          type: string
+#          example: '0x07d971c03553011a48e951a53f48632d37652ba1'
+#          required: true
+#          description: address of the NFT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTHolderCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'tokenAddress'
+                  items:
+                    type: string
+                  example:
+                    - '0x07d971c03553011a48e951a53f48632d37652ba1'
+      responses:
+        '200':
+          description: The hex encoded number of token holders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x123"    
+  /nr_getNFTTokens:
+    post:
+      tags:
+        - Released
+      summary: Get the list of NFT token ids and according totalSupply of an NFT(721/1155) token
+      description: >-
+        Returns the list of NFT token ids and according totalSupply of an NFT(721/1155) token
+        
+        + Sugar: false
+        
+        + Cost: 100
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTTokens
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the NFT token
+
+                    - token type: type of the token, has to be one of [ERC721, ERC1155]
+
+                    - pageSize: hex endoded page size, 20 by default, 100 maximum
+
+                    - pageKey: uuid formated pageKey, null or empty string for first page
+
+                  items:
+                    type: string
+                  example:
+                    - '0x07d971c03553011a48e951a53f48632d37652ba1'
+                    - 'ERC721'
+                    - '0x14'
+                    - ''
+      responses:
+        '200':
+          description: List of token ids and totalSupply
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: array
+                    description: token id and totalSupply
+                    items:
+                      type: object
+                      properties:
+                        tokenId:
+                          type: string
+                          example: "0x123"
+                        totalSupply:
+                          type: string
+                          example: "0x123"
+  /nr_getNFTTokenCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of NFT tokens of an NFT(721/1155) token
+      description: >-
+        Returns the number of token ids of an NFT(721/1155) token
+        
+        + Sugar: false
+        
+        + Cost: 50
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTTokenCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the NFT token (ERC721/ERC1155)
+
+                  items:
+                    type: string
+                  example:
+                    - '0x07d971c03553011a48e951a53f48632d37652ba1'
+      responses:
+        '200':
+          description: The hex encoded number of tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x123"
+
+  /nr_getTokenHoldingCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of ERC20 token holdings of an account
+      description: >-
+        Returns the number of ERC20 token holdings of an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenHoldingCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'accountAddress'
+                  items:
+                    type: string
+                  example:
+                    - '0x35BA0C8AB94F09772A074374647E04F7B939F458'
+      responses:
+        '200':
+          description: the number of ERC20 token holdings of the given account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x4E5"
+  /nr_getNFTHoldingCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of NFT(721/1155) token holdings of an account
+      description: >-
+        Returns the number of NFT(721/1155) token holdings of an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTHoldingCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: 'accountAddress'
+                  items:
+                    type: string
+                  example:
+                    - '0x21d45650db732cE5dF77685d6021d7D5d1da807f'
+      responses:
+        '200':
+          description: The number of NFT(721/1155) token holdings of the given account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      count721:
+                        type: string
+                        example: '0x2'
+                      count1155:
+                        type: string
+                        example: '0x0'
+  /nr_getNFTCollectionHolderCount:
+    post:
+      tags:
+        - Released
+      summary: Get the number of NFT(721/1155) collection holders of an NFT(721/1155) token
+      description: >-
+        Returns the number of NFT(721/1155) collection holders of an NFT(721/1155) token
+        
+        + Sugar: false
+        
+        + Cost: 50
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getNFTCollectionHolderCount
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the NFT token
+
+                    - token type: type of the token, has to be one of [ERC721, ERC1155]
+
+                  items:
+                    type: string
+                  example:
+                    - '0x07D971C03553011a48E951a53F48632D37652Ba1'
+                    - 'ERC721'
+      responses:
+        '200':
+          description: The number of NFT(721/1155) collection holders of the given token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x4E5"
+  /nr_getTokenHolderCountByBalance:
+    post:
+      tags:
+        - Trace Design
+      summary: Gets the number of holders greater than balance in a token
+      description: >-
+        Gets the number of holders greater than balance in a token
+        
+        + Sugar: false
+        
+        + Cost: 50
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTokenHolderCountByBalance
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - token address: address of the NFT token
+                    
+                    - balance: balance
+
+                  items:
+                    type: string
+                  example:
+                    - '0x07D971C03553011a48E951a53F48632D37652Ba1'
+                    - '1000.999'
+      responses:
+        '200':
+          description: the number of holders greater than balance in a token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: string
+                    example: "0x4E5"
+
+  /nr_getTransactionDetail:
+    post:
+      tags:
+        - Released
+      summary: Get information about the transaction
+      description: >-
+        Get information about the transaction
+        
+        + Sugar: false
+        
+        + Cost: 50
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                method:
+                  type: string
+                  example: nr_getTransactionDetail
+                jsonrpc:
+                  type: string
+                  example: '2.0'
+                params:
+                  type: array
+                  description: >-
+                    - transaction hash
+                  items:
+                    type: string
+                  example:
+                    - '0x07D971C03553011a48E951a53F48632D37652Ba1'
+      responses:
+        '200':
+          description: the information about the transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1
+                  jsonrpc:
+                    type: string
+                    example: '2.0'
+                  result:
+                    type: object
+                    properties:
+                      hash:
+                        type: string
+                        example: '0x194def7bf7f6afe6880f38fc6c8679721135bbabf53ada450fcc8080e4ff2f74'
+                      blockHash:
+                        type: string
+                        example: '0xefa8d65612cbf1e0a2b49e51bb594e7206ab3e2baa6e20ad209910bffb36b812'
+                      blockNumber:
+                        type: integer
+                        example: 21082531
+                      blockTimeStamp:
+                        type: integer
+                        example: 1662429025
+                      value:
+                        type: string
+                        example: '0'
+                      fees:
+                        type: integer
+                        example: 705875000000000
+                      ethereumSpecific:
+                        type: object
+                        properties:
+                          receiptsStatus:
+                            type: integer
+                            example: 1
+                          nonce:
+                            type: integer
+                            example: 334
+                          gas:
+                            type: integer
+                            example: 141175
+                          gasUsed:
+                            type: integer
+                            example: 141175
+                          gasPrice:
+                            type: integer
+                            example: 5000000000
+                          input:
+                            type: string
+                            example: '0x68a1a8c60000000000000000000000000000000000000000000000003782dace9d900000'
+                      vin:
+                        type: object
+                        properties:
+                          address:
+                            type: string
+                            example: '0xa431b01ba9cf3dbc1baa11be38c4a341378fdc79'
+                          isAddress:
+                            type: boolean
+                            example: false
+                          value:
+                            type: string
+                            example: '0'
+                      vout:
+                        type: object
+                        properties:
+                          address:
+                            type: string
+                            example: '0xa431b01ba9cf3dbc1baa11be38c4a341378fdc79'
+                          isAddress:
+                            type: boolean
+                            example: false
+                          value:
+                            type: string
+                            example: '0'
+                      tokenTransfers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            category:
+                              type: string
+                              example: '20'
+                            from:
+                              type: string
+                              example: '0xa431b01ba9cf3dbc1baa11be38c4a341378fdc79'
+                            to:
+                              type: string
+                              example: '0x882a6ca7f03fc489661a18f3b8a2c20e05eabfdc'
+                            token:
+                              type: string
+                              example: '0xb69974f60eb1499ef06e6dfca23a6fd1f631e40c'
+                            tokenName:
+                              type: string
+                              example: 'NMT'
+                            symbol:
+                              type: string
+                              example: 'NMT'
+                            decimal:
+                              type: integer
+                              example: 18
+                            value:
+                              type: string
+                              example: 800000000000000000
