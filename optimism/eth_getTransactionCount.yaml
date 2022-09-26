@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: eth_getTransactionCount - optimism
+  version: '1.0'
+servers:
+  - url: 'https://opt-mainnet.nodereal.io/v1'
+paths:
+  /{apiKey}:
+    post:
+      $ref: ../ethereum/eth_getTransactionCount.yaml#/components/pathItems/path/post
+      operationId: eth-gettransactioncount-optimism
+      x-readme:
+        samples-languages:
+          - javascript
+          - curl
+          - python
+          - go
