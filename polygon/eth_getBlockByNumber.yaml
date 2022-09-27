@@ -7,7 +7,7 @@ servers:
 paths:
   /{apiKey}:
     post:
-      $ref: ../evm_body.yaml#/eth_getBlockByNumber
+      $ref: ../evm_body.yaml#/eth_getBlockByNumber_l2
       operationId: eth-getblockbynumber-polygon
       parameters:
           - name: apiKey
