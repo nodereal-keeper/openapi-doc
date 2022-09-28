@@ -3,7 +3,7 @@ info:
   title: eth_getBalance
   version: '1.0'
 servers:
-  - url: 'https://ethw-mainnet.nodereal.io/v1'
+  - url: 'https://bsc-mainnet.nodereal.io/v1'
 paths:
   /{apiKey}:
     $ref: '#/components/pathItems/path'
