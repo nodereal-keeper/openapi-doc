@@ -15,7 +15,7 @@ servers:
     variables:
       user_token:
         description: Aptos node API token
-        default: ''
+        default: '{user_token}'
       server_url:
         description: Aptos node API url
         default: 'aptos-mainnet.nodereal.io/v1'
