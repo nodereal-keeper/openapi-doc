@@ -11,11 +11,11 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: '{user_token}@{server_url}'
+  - url: '{api_key}@{server_url}'
     variables:
       user_token:
         description: Aptos node API token
-        default: '{user_token}'
+        default: '{api_key}'
       server_url:
         description: Aptos node API url
         default: 'aptos-mainnet.nodereal.io/v1'
