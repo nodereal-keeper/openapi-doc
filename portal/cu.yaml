@@ -5,7 +5,7 @@ info:
   title: rpc-portal API
   contact: {}
   version: '1.0'
-host: 'portal-api.nodereal.io'
+host: 'https://portal-api.nodereal.io'
 basePath: /v1
 paths:
   /{user_key}/cu-detail:
