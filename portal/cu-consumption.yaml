@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: CU detail
+  version: '1.0'
+servers:
+  - url: https://portal-api.nodereal.io/v1
+    description: Development server
+  - url: https://rpc-portal.bk.nodereal.cc/v1
+    description: Development server
+paths:
+  /{apiKey}/cu-detail:
+    get:
+      description: CU detail
+      summary: CU detail
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+          required: true
+      operationId: getCUDetail
+      responses:
+          '200':
+            description: Returns user CU detail.
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/response'
+                    - type: object
+                      properties:
+                        data:
+                          $ref: '#/components/schemas/cudetail'
+          '400':
+              description: Invalid request
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+  /{apiKey}/cu-consumption:
+    get:
+      description: CU consumption
+      summary: CU consumption
+      parameters:
+        - name: apiKey
+          in: path
+          schema:
+            type: string
+          required: true
+        - name: startTime
+          in: query
+          schema:
+            type: string
+          required: true
+        - name: endTime
+          in: query
+          schema:
+            type: string
+          required: true
+      operationId: getCUCunsumption
+      responses:
+          '200':
+            description: Returns user CU consumption.
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/response'
+                    - type: object
+                      properties:
+                        data:
+                          $ref: '#/components/schemas/cuConsumptionResp'
+          '400':
+              description: Invalid request
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+          '403':
+              description: Internal error
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+components:
+  schemas:
+    response:
+      type: object
+      properties:
+        code:
+          type: integer
+        data: {}
+        msg:
+          type: string
+    cudetail:
+      type: object
+      properties:
+        autoscaling:
+          type: boolean
+        cups:
+          type: integer
+        plan:
+          type: string
+        remainingQuota:
+          type: integer
+        totalQuota:
+         type: integer
+        usage:
+          type: integer
+    cuConsumptionResp:
+      type: object
+      properties:
+        endTime:
+          type: integer
+        records:
+          items:
+            $ref: '#/components/schemas/methodCost'
+          type: array
+        startTime:
+          type: integer
+        totalConsumption:
+          type: integer
+    methodCost:
+      properties:
+        cost:
+          type: integer
+        count:
+          type: integer
+        method:
+          type: string
+      type: object
