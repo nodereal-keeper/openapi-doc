@@ -11,7 +11,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: '{api_key}@{server_url}/v1'
+  - url: '{server_url}/{api_key}/v1'
     variables:
       user_token:
         description: Aptos node API token
