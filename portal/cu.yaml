@@ -57,6 +57,8 @@ components:
          type: integer
         usage:
           type: integer
+        network:
+          type: string
     response:
       type: object
       properties:
