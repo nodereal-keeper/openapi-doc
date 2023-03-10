@@ -137,4 +137,6 @@ components:
           type: integer
         method:
           type: string
+        network:
+          type: string
       type: object
